@@ -6,4 +6,9 @@ function Node(data,x,y){
     this.x=x;
     this.y=y;
 
+    this.xOffset=x;
+    this.yOffset=y;
+
+    this.level;
+
 }

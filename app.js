@@ -1,8 +1,8 @@
 
 //test data for assertions
-let arr = [10,2,34,56,3,12];
-let animation=false; // toggle animation here
-
+//let arr = [10,2,34,56,-5,-7,3,5,12,11,67,86,32];
+let arr=[]
+let spacing;
 
 
 
@@ -10,26 +10,26 @@ let animation=false; // toggle animation here
 /* Don't edit the stuff below 
 ------------------------------*/
 function setup(){
-    createCanvas(innerWidth, innerHeight);
+    createCanvas(1000, 5000);
     background(190);
 
 }
 
-function draw(){
-    if(!animation){
-        background(190);
-    }
-    translate(900,200);
-    let root = new Node(5,0,0);
-    arr.forEach(n=>{
-        insert(root,n);//asserting test data to root
-    });
 
-    if(!animation){
-        outPutTree(root);//out puts the tree without animation
-    }else{
-        outPutTreeAnimation(root);//out puts the tree with animation
-    }
+function draw(){
+    background(190);
+    translate(500,200);
+    let root;
+    arr.forEach(n=>{
+        if(root==null) {
+            root = new Node(n,0,0);
+            root.level=1;
+        }else{
+            spacing=1;
+            insert(root,n);//asserting test data to root
+        }
+    });
+    outPutTree(root);//out puts the tree without animation
     
 
 
@@ -42,10 +42,15 @@ function draw(){
 
 //node assertion function
 function insert(root, data){
+    var xOffset=290*0.9;
+    var yOffset=180*0.9;
     if(root==null) return;
     if(data<root.data){
         if(root.left==null){
-            let node = new Node(data,root.x-80,root.y+50);
+            let x=root.x-((root.x-(root.x-xOffset/root.level))/root.level);
+            let y=root.y-((root.y-(root.y+yOffset*root.level))/root.level);
+            let node = new Node(data,x,y);
+            node.level=root.level+1;
             root.left=node;
             return;
         }else{
@@ -53,7 +58,10 @@ function insert(root, data){
         }
     }else{
         if(root.right==null){
-            let node = new Node(data,root.x+80,root.y+50);
+            let x=root.x-((root.x-(root.x+xOffset/root.level))/root.level);
+            let y=root.y-((root.y-(root.y+yOffset*root.level))/root.level);
+            let node = new Node(data,x,y);
+            node.level=root.level+1;
             root.right=node;
             return;
         }else{
@@ -61,6 +69,7 @@ function insert(root, data){
         }
     }
 }
+
 
 //node output function
 function outPutTree(root){
@@ -70,9 +79,7 @@ function outPutTree(root){
         }
         if(root.right!=null){
             line(root.x,root.y,root.right.x,root.right.y);
-        }
-        
-        
+        }        
         fill("white");
         circle(root.x , root.y, 50,50);
         textSize(20);
@@ -82,43 +89,23 @@ function outPutTree(root){
         outPutTree(root.left);
         outPutTree(root.right);
 
+      
 
 
     }
+    
 
 }
 
 
 
-//node output function with animation
-function outPutTreeAnimation(root){
-    if(root!=null){
-        setTimeout(()=>{
-            if(root.left!=null){
-                line(root.x,root.y,root.left.x,root.left.y);
-            }
-            if(root.right!=null){
-                line(root.x,root.y,root.right.x,root.right.y);
-            }
-            
-            
-            fill("white");
-            circle(root.x , root.y, 50,50);
-            textSize(20);
-            fill("black");
-            textAlign(CENTER, CENTER);
-            text(root.data, root.x , root.y );
-            outPutTreeAnimation(root.left);
-            outPutTreeAnimation(root.right);
 
-        },3000)
-
-
-
+function insertNode(){
+    let value=parseInt(document.querySelector("#insert").value);
+    if(!Number.isNaN(value)){
+        arr.push(value);
     }
-
 }
-
 
 
 
